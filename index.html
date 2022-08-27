@@ -15,7 +15,7 @@
         function Main() {
             const [todos, setTodos] = React.useState([])
             const [todo, setTodo] = React.useState({
-                // id:0,
+                id:0,
                 text: "",
                 description: ""
             })
@@ -24,7 +24,7 @@
             function textHandler(event) {
                 setTodo({
                     ...todo,
-                    text: event.target.value
+                    [event.target.name]: event.target.value
                 })
             }
 
@@ -32,43 +32,52 @@
                 event.preventDefault()
                 // console.log(todo.text)
                 const newTodo=todo 
-                setCurrentTodo(todo.text)
+                // setCurrentTodo(todo.text)
+                newTodo.id+= 1
                 setTodos([...todos, newTodo])      //ne tolko obj i massivi mojno tak []
                 setTodo({
                     ...todo,
-                    text:""
+                    text:"",
+                    description: ""
             })
-        }
+            }
             
             return (
                 <div>
                     <form onSubmit={addTodo}>
                         <input
+                            name="text"
                             type="text"
                             value={todo.text}
                             onChange={todoHandler} 
                         />
                         <textarea
                             name="description"
-                            value={todo.descriptiont}
-                            onChange={todoHandler} 
-                        />
+                            value={todo.description}
+                            onChange={todoHandler}
+                        > 
+                        </textarea>
                         <button>Добавить</button>
                     </form>
-                    <dTodoList todos = {todos}/>
+                    <TodoList todos = {todos}/>
                 </div>
             )
         }
-        function tTodoList ({todos}){     //eto props
+        function TodoList ({todos}){     //eto props
             return (
                 <ul>
-                    {todos.map((elem, index) => <TodoItems todoObject={elem}/>)}
+                    {todos.map(elem => <TodoItems key={elem.id} todoObject={elem}/>)}
                 </ul>
             )
         }
         
         function TodoItem({todoObject}) {
-            return <li>{todoObject.text}</li>
+            return 
+            <div>
+                <h3>{todoObject.id}.{todoObject.text}</h3>
+                <div> {todoObject.description}</div>
+                <hr/>
+            </div>
         }
         
         ReactDOM.render(<Main/>, document.getElementById("core"))
